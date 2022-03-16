@@ -1,4 +1,12 @@
-# Vue Plugin Template for Figma
+# Figma plugin DS Helper
+
+1. Open Figma Desktop app
+2. Open any file
+3. Right-click on the canvas
+4. Select Development > Load existing plugin from manifest
+5. Navigate to the plugin folder
+6. Select manifest.json
+
 
 ## Features:
 
