@@ -1,8 +1,8 @@
-const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin')
-const RemovePlugin = require('remove-files-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const path = require('path')
+const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
+const RemovePlugin = require('remove-files-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const path = require('path');
 
 module.exports = (env, argv) => ({
   // This is necessary because Figma's 'eval' works differently than normal eval
@@ -100,4 +100,4 @@ module.exports = (env, argv) => ({
           }),
           new HtmlWebpackInlineSourcePlugin(),
         ],
-})
+});
