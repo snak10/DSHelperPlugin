@@ -10,8 +10,6 @@ handleEvent('setCornerRadius', (cornerRadiusValue) => {
 		node['cornerSmoothing'] = 0.6;
 		figma.notify('Corner radius set, Smoothing set to iOS default ' + cornerRadiusValue, { timeout: 500 })
 	}
-    figma.ui.resize(200, 200);
-
 	// This shows how the main code can send messages to the UI code.
 	dispatch('cornerRadiusSet');
 });
