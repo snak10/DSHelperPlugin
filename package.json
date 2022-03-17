@@ -8,6 +8,7 @@
 		"build": "webpack --mode=production"
 	},
 	"dependencies": {
+		"pug": "^3.0.2",
 		"pug-loader": "^1.0.2",
 		"pug-plain-loader": "^1.1.0"
 	},
