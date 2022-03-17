@@ -7,7 +7,6 @@
 5. Navigate to the plugin folder
 6. Select manifest.json
 
-
 ## Features:
 
 - Vue

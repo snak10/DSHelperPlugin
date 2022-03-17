@@ -25,61 +25,60 @@
                 label {{ nodeWithError.name }}
 </template>
 
-
 <script>
-import { dispatch, handleEvent } from "./uiMessageHandler";
+import { dispatch, handleEvent } from './uiMessageHandler'
 
 // Add these lines to import the interactive figma-ui components as needed.
-import "./figma-ui/js/selectMenu";
-import "./figma-ui/js/iconInput";
-import "./figma-ui/js/disclosure";
+import './figma-ui/js/selectMenu'
+import './figma-ui/js/iconInput'
+import './figma-ui/js/disclosure'
 
 export default {
   data() {
     return {
       corners: [
-        { value: "4", name: "XXX-Small-Card" },
-        { value: "8", name: "XX-Small-Card" },
-        { value: "12", name: "X-Small-Card" },
-        { value: "16", name: "X-Medium Card" },
-        { value: "20", name: "Medium Card" },
-        { value: "24", name: "Large Card" },
+        { value: '4', name: 'XXX-Small-Card' },
+        { value: '8', name: 'XX-Small-Card' },
+        { value: '12', name: 'X-Small-Card' },
+        { value: '16', name: 'X-Medium Card' },
+        { value: '20', name: 'Medium Card' },
+        { value: '24', name: 'Large Card' },
       ],
       nodesWithError: [],
-    };
+    }
   },
   mounted() {
     // Add these lines to initialize the interactive figma-ui components as needed.
-    window.selectMenu.init();
-    window.iconInput.init();
-    window.disclosure.init();
+    window.selectMenu.init()
+    window.iconInput.init()
+    window.disclosure.init()
 
     // The following shows how messages from the main code can be handled in the UI code.
-    handleEvent("nodesWithError", (errorNodes) => {
-      this.$set(this.nodesWithError, null, errorNodes);
-    });
+    handleEvent('nodesWithError', (errorNodes) => {
+      this.$set(this.nodesWithError, null, errorNodes)
+    })
   },
   methods: {
     setCornerRadius(cornerRadiusValue) {
       // This shows how the UI code can send messages to the main code.
-      dispatch("setCornerRadius", cornerRadiusValue);
+      dispatch('setCornerRadius', cornerRadiusValue)
     },
     lintFillStyle() {
       // This shows how the UI code can send messages to the main code.
-      dispatch("lintFillStyle");
+      dispatch('lintFillStyle')
     },
     nextErrorOccurence() {
       // This shows how the UI code can send messages to the main code.
-      dispatch("nextErrorOccurence");
+      dispatch('nextErrorOccurence')
     },
     previousErrorOccurence() {
       // This shows how the UI code can send messages to the main code.
-      dispatch("previousErrorOccurence");
+      dispatch('previousErrorOccurence')
     },
   },
-};
+}
 </script>
 
-<style lang='scss'>
-@import "./figma-ui/figma-plugin-ds";
+<style lang="scss">
+@import './figma-ui/figma-plugin-ds';
 </style>
