@@ -1,10 +1,51 @@
 * {
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
 }
 
 .container {
   margin: 8px;
+}
+
+.disclosure__content {
+  .sectionTitle {
+    display: inline-block;
+    margin-bottom: 16px;
+    font-weight: bold;
+  }
+  button.button.button--primary {
+    width: 100%;
+  }
+}
+
+.errorList {
+  list-style-type: none;
+  margin: 0;
+  padding-left: 0;
+
+  
+  .errorList__item{
+    border-bottom: 1px solid #e5e5e5;
+    padding: 8px 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    .errorList__item-label{
+      line-height: 32px;
+      height: 32px;
+      padding: 0 8px;
+      width: calc(100% - 16px);
+      flex-shrink: 1;
+      white-space: pre;
+      font-feature-settings: "ss02" on,"liga" on,"calt" on;
+      text-align: left;
+    }
+  }
 }

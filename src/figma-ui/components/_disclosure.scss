@@ -61,7 +61,7 @@
     @include font-ui-pos('small', 'normal');
 
     display: none;
-    padding: 8px 8px 8px 24px;
+    padding: 8px 24px;
 
     color: $figma-black-8;
   }
@@ -74,8 +74,12 @@
 
   &--expanded & {
     &__content {
-      display: block;
-
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      justify-content: center;
+      align-content: space-around;
       border-bottom: 1px solid transparent;
     }
 

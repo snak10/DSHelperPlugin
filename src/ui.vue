@@ -2,27 +2,47 @@
 #listOfButtons
   h1.type--pos-xlarge-bold Sup Designer!<br />Let's get some DS consistency?
   .divider
+
   ul.disclosure
+
     li.disclosure__item
       .disclosure__label.disclosure__section Corner Radius
-      .disclosure__content
-        p.type.type--pos-small-normal Click to set corner radius to 16px
-        button.button.button--secondary(v-for="corner in corners")(
-          @click="setCornerRadius(corner.value)"
+      #discloseCornerRadius.disclosure__content
+        label 
+          strong Click to set corner radius to 16px
+        button.button.button--secondary(v-for='corner in corners')(
+          @click='setCornerRadius(corner.value)'
         ) {{ corner.name }}
+
+    li.disclosure__item
+      .disclosure__label.disclosure__section Quick Components
+      .disclosure__content
+        label.sectionTitle Click to create components
+        button.button.button--primary(@click='createTableHeader()') Create Table header
+
     li.disclosure__item
       .disclosure__label.disclosure__section Autolayout Spacings
       .disclosure__content
-    li.disclosure__item
+
+    li.disclosure__item.disclosure--expanded
       .disclosure__label.disclosure__section Design Linter
       .disclosure__content
         label.sectionTitle Select layers to look for missing color style
-        button.button.button--secondary(@click="lintFillStyle()") Search and select
-        .container
-          ul
-            li(v-for="nodeWithError in nodesWithError")
-              button.button.button-secondary
-                label {{ nodeWithError.name }}
+        button.button.button--primary(@click='lintFillStyle()') Search missing color style
+        button.button.button--primary(@click='newLintFillStyle()') New search missing color style
+        button.button.button--secondary(@click='lintPageFillStyle()') Search in page
+
+        .errorListContainer
+          ul.errorList
+
+            li.errorList__item(v-for='nodeWithError in nodesWithError')
+              label.errorList__item-label {{ nodesWithError.type }} / {{ nodeWithError.name }}
+              button.button.button-secondary(@click='zoomNode(nodeWithError)') Select
+
+            li.errorList__item(v-for='pageNodeWithError in pageNodesWithError')
+              label.errorList__item-label {{ nodesWithError.type }} / {{ pageNodeWithError.name }}
+              button.button.button-secondary(@click='zoomNode(pageNodeWithError)') Select
+
 </template>
 
 <script>
@@ -45,6 +65,7 @@ export default {
         { value: '24', name: 'Large Card' },
       ],
       nodesWithError: [],
+      pageNodesWithError: [],
     };
   },
   mounted() {
@@ -57,19 +78,36 @@ export default {
     handleEvent('nodesWithError', (errorNodes) => {
       this.nodesWithError = errorNodes;
     });
+
+    // The following shows how messages from the main code can be handled in the UI code.
+    handleEvent('pageNodesWithError', (errorNodes) => {
+      this.pageNodesWithError = errorNodes;
+    });
   },
   methods: {
     setCornerRadius(cornerRadiusValue) {
       // This shows how the UI code can send messages to the main code.
       dispatch('setCornerRadius', cornerRadiusValue);
     },
+    createTableHeader() {
+      // This shows how the UI code can send messages to the main code.
+      dispatch('createTableHeader');
+    },
     lintFillStyle() {
       // This shows how the UI code can send messages to the main code.
       dispatch('lintFillStyle');
     },
+    lintPageFillStyle() {
+      // This shows how the UI code can send messages to the main code.
+      dispatch('lintPageFillStyle');
+    },
     nextErrorOccurence() {
       // This shows how the UI code can send messages to the main code.
       dispatch('nextErrorOccurence');
+    },
+    zoomNode(nodeWithError) {
+      // This shows how the UI code can send messages to the main code.
+      dispatch('zoomNode', nodeWithError);
     },
     previousErrorOccurence() {
       // This shows how the UI code can send messages to the main code.

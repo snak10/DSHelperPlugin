@@ -175,9 +175,24 @@ export function customCheckTextFills(node, errors) {
     // Get style if there's any
     const style = figma.getStyleById(selection.fillStyleId);
 
+    // node.fills.visible = true
+    /* Rules for ignoring:
+     - No fills
+     - When all fills.visible are false
+     - When there are many fills
+     - No styles
+     - Style not inside fills to check
+    */
+
+    if (selection.fills && (selection.fills.length !== 1 || selection.fills[0].visible === false)) {
+      return null;
+    }
+
+
     // If node has a style AND that style is inside the fillsToCheck, than returns nothing.
     // Otherwise, return the selected node not following the DS Style
     return style && fillsToCheck.includes(style.key) ? null : selection;
+
   });
 
   console.log(
@@ -185,46 +200,112 @@ export function customCheckTextFills(node, errors) {
     filteredList
   );
 
-  return filteredList;
+  const compareLayerName = (a, b) => {
+    if (a.type < b.type) {
+      return -1;
+    }
+    if (a.type > b.type) {
+      return 1;
+    }
+    return 0;
+  }
 
-  // let nodeFillStyle = node.fillStyleId;
+  return filteredList.sort(compareLayerName);
 
-  // // If there are multiple text styles on a single text layer, we can't lint it
-  // // we can return an error instead.
-  // if (typeof nodeFillStyle === 'symbol') {
-  //   return errors.push(
-  //     createErrorObject(
-  //       node, // Node object we use to reference the error (id, layer name, etc)
-  //       'fill', // Type of error (fill, text, effect, etc)
-  //       'Mixing two styles together', // Message we show to the user
-  //       'Multiple Styles' // Normally we return a hex value here
-  //     )
-  //   );
-  // }
+}
 
-  // // We strip the additional style key characters so we can check
-  // // to see if the fill is being used incorrectly.
-  // //   nodeFillStyle = nodeFillStyle.replace("", "");
-  // //   nodeFillStyle = nodeFillStyle.split(",")[0];
+// Custom Lint rule that isn't being used yet!
+// that ensures our text fills aren't using styles (design tokens) meant for backgrounds.
+export function newCustomCheckTextFills(node, errors) {
+  // Here we create an array of style keys (https://www.figma.com/plugin-docs/api/PaintStyle/#key)
+  // that we want to make sure our text layers aren't using.
+  const fillsToCheck = [
+    '5417d9f065908c97e6f96e9bd796420f74ba4e64',
+    '4b93d40f61be15e255e87948a715521c3ae957e6',
+    'b702400eccad9a1aa42e4153115e7cdc3c2b9f32',
+    'c7797740643a0ecf88ac2b01d0d60490ee0d6920',
+    '9d5f22ae1e9133f327e3a5fb8c9a9b200b871777',
+    '5f23966ec7efc9ca1fcf71b856302b08e6bad34b',
+    '68407b8bf004bb0bc3aedc2a3ff60323bf2e4ff6',
+    '075b8ea4849bd12b3e9be39cd300896d45d55ae7',
+    '6314f78c3536d86f935f413850c3e8e0d4cdb456',
+    '3ca6042dbf2fb59d1fbedc60eeebe64b83c219ec',
+    '48f48368f7c3e8ca32877bf3e1b8559c12018e7b',
+    '942a415d788a8e3069f31a68896bb3367f8bace2',
+    'b37d2ce7fce66fa6d3155439f7aadf63239ff0c9',
+    '63d350fd359f1d960d479b8aa963bc10cb9fc234',
+    'd8b1e022cdeae152afe652e3b180b10157b47ea0',
+    '8bb285926ca945d3c278c2dc0b474ad9fc6bc5fd',
+    '28c6d3560d5ddaf101a622bd108e95409d3f37e0',
+    'b336528eb4a33104d5a8d2c7c5573f4d9759f1e4',
+    'b5f65c52992751ae73b8473aa902f17bc07a1e9b',
+    '25ec8d4f518b41fe13b076c9c9f4d81ea73685ab',
+    '778b72bbbf274f0adda1fe3051e9eede1fe9ba45',
+    'eea43b1a1118e07afeb7f85cbe9d8baed9236d26',
+    '9975bbc909f6a2db4bb2efda3921f94ff03498d8',
+    'b68f523bc267b85eed4d9bb0c6db85b4c49c09a7',
+    '3ef7ac1ab17ac9b9d28714765219c24d9d9945eb',
+    'b4dd75ae0dfee3c24884edf745942de17fb4a284',
+    'f8d971c048988ead253985a83ddf241b4101db1a',
+    '00d0de4dce7c7cb4eb65b976b3e472b09745c092',
+    'e1bead442e6eec4d6009541add33bf2d505f3f44',
+    '5f74bdea3411c7660425c4b28ad83563c3b06135',
+    'f5118d3f85d054ddcaab539f6323979ba20c2c25',
+    'a30e8812d9014670965dff679fe6ef5f57c0ea0e',
+    '0a78212b0d89925caf43ea7e789d578cad30730d',
+    '68e234d8bcbd5733e3251928d35ea8f9de87f534',
+    '108c7e81a73ba83fe1f04ce8d04290e8f6b29a7e',
+    'a218ad0a9d8a1b70b3f594cdce4c5f6ea40f67e1',
+    'd698f6efb39c782b7af54029047ec77490e9c55c',
+    '4e5c475dfc8bc7b11f8698e7ec93c04d9cc99423',
+    'S29b78fd87442715b48a80be05a712886769611ca',
+    'baf76954c29e7c4f8ad30ea4441c1c13487f48cf',
+    'f8526696771c8e3d15c30e86c3e9c6b38306cddf',
+    '83c356d787f4b442d7265d140aa717975952b483',
+    'a21dd0614917986b92744d57c0dcf8ab03c01545',
+    '401152a4aea82462a018f2a0eee525d0f8bde245',
+    // To collect style keys, use a plugin like Inspector, or use console commands like figma.getLocalPaintStyles();
+    // in your design system file.
+  ];
 
-  // // If the node (layer) has a fill style, then check to see if there's an error.
-  // if (nodeFillStyle !== '') {
-  //   // If we find the layer has a fillStyle that matches in the array create an error.
-  //   if (fillsToCheck.includes(nodeFillStyle)) {
-  //     return errors.push(
-  //       createErrorObject(
-  //         node, // Node object we use to reference the error (id, layer name, etc)
-  //         'fill', // Type of error (fill, text, effect, etc)
-  //         'Incorrect text color use', // Message we show to the user
-  //         'Using a background color on a text layer' // Determines the fill, so we can show a hex value.
-  //       )
-  //     );
-  //   }
-  //   // If there is no fillStyle on this layer,
-  //   // check to see why with our default linting function for fills.
-  // } else {
-  //   checkFills(node, errors);
-  // }
+  let nodeFillStyle = node.fillStyleId;
+
+  // If there are multiple text styles on a single text layer, we can't lint it
+  // we can return an error instead.
+  if (typeof nodeFillStyle === 'symbol') {
+    return errors.push(
+      createErrorObject(
+        node, // Node object we use to reference the error (id, layer name, etc)
+        'fill', // Type of error (fill, text, effect, etc)
+        'Mixing two styles together', // Message we show to the user
+        'Multiple Styles' // Normally we return a hex value here
+      )
+    );
+  }
+
+  // We strip the additional style key characters so we can check
+  // to see if the fill is being used incorrectly.
+  nodeFillStyle = nodeFillStyle.replace("", "");
+  nodeFillStyle = nodeFillStyle.split(",")[0];
+
+  // If the node (layer) has a fill style, then check to see if there's an error.
+  if (nodeFillStyle !== '') {
+    // If we find the layer has a fillStyle that matches in the array create an error.
+    if (fillsToCheck.includes(nodeFillStyle)) {
+      return errors.push(
+        createErrorObject(
+          node, // Node object we use to reference the error (id, layer name, etc)
+          'fill', // Type of error (fill, text, effect, etc)
+          'Incorrect text color use', // Message we show to the user
+          'Using a background color on a text layer' // Determines the fill, so we can show a hex value.
+        )
+      );
+    }
+    // If there is no fillStyle on this layer,
+    // check to see why with our default linting function for fills.
+  } else {
+    checkFills(node, errors);
+  }
 }
 
 // Check for effects like shadows, blurs etc.

@@ -1,9 +1,8 @@
 import { dispatch, handleEvent } from './codeMessageHandler';
 import { customCheckTextFills } from './lintingFunctions';
 
-figma.showUI(__html__, { width: 300, height: 600 });
+figma.showUI(__html__, { width: 320, height: 600 });
 
-// The following shows how messages from the UI code can be handled in the main code.
 handleEvent('setCornerRadius', (cornerRadiusValue) => {
   for (const node of figma.currentPage.selection) {
     node['cornerRadius'] = parseInt(cornerRadiusValue);
@@ -13,24 +12,48 @@ handleEvent('setCornerRadius', (cornerRadiusValue) => {
       { timeout: 500 }
     );
   }
-  // This shows how the main code can send messages to the UI code.
+
   dispatch('cornerRadiusSet');
 });
 
-// The following shows how messages from the UI code can be handled in the main code.
 handleEvent('lintFillStyle', () => {
-  const nodesWithError = customCheckTextFills(
-    figma.currentPage.selection,
-    null
-  );
-
+  const nodesWithError = customCheckTextFills(figma.currentPage.selection, null);
   const formattedNodes = nodesWithError.map((node) => {
+    console.log(node);
     return {
       id: node.id,
       name: node.name,
+      parent: node.parent,
+      type: node.type,
     };
   });
+
   dispatch('nodesWithError', formattedNodes);
 });
-// Como eu faço pra fazer uma queue da lista e um botao pra proximo e anterior?
-// Como eu checo se os valores na customCheckTextFills(node, errors) somente nos valores que eu passei?
+
+handleEvent('lintPageFillStyle', () => {
+  const pageNodesWithError = customCheckTextFills(
+    figma.currentPage.findAll(),
+    null
+  );
+
+  const formattedPageNodes = pageNodesWithError.map((node) => {
+    return {
+      id: node.id,
+      name: node.name,
+      parent: node.parent,
+    };
+  });
+  dispatch('pageNodesWithError', formattedPageNodes);
+});
+
+handleEvent('zoomNode', (nodeWithError) => {
+  const selection = figma.currentPage.selection.slice();
+  selection.splice(nodeWithError) //Removes current selection
+  selection.push(nodeWithError) //Adds node to the selection
+  figma.currentPage.selection = selection
+  figma.viewport.scrollAndZoomIntoView([nodeWithError]);
+});
+
+handleEvent('createTableHeader', () => {
+});
