@@ -21,7 +21,7 @@
         .container
           ul
             li(v-for="nodeWithError in nodesWithError")
-              button.button.button-secondary Select
+              button.button.button-secondary
                 label {{ nodeWithError.name }}
 </template>
 

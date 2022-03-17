@@ -23,8 +23,14 @@ handleEvent('lintFillStyle', () => {
     figma.currentPage.selection,
     null
   );
-  console.log('Érro: ', nodesWithError);
-  dispatch('nodesWithError', nodesWithError);
+
+  const formattedNodes = nodesWithError.map((node) => {
+    return {
+      id: node.id,
+      name: node.name,
+    };
+  });
+  dispatch('nodesWithError', formattedNodes);
 });
 // Como eu faço pra fazer uma queue da lista e um botao pra proximo e anterior?
 // Como eu checo se os valores na customCheckTextFills(node, errors) somente nos valores que eu passei?
