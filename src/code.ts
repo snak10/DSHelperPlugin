@@ -58,18 +58,11 @@ handleEvent('zoomNode', (nodeWithError) => {
   figma.viewport.scrollAndZoomIntoView([nodeWithError]);
 });
 
-
-
-
-
-
-
-
 handleEvent('addTopRow', async () => {
   
   console.log(figma.currentPage.selection)
 
-  if (figma.currentPage.selection == []) {
+  if (figma.currentPage.selection.length == 0) {
 
     // Check: If the user don't have anything selected
     // 1 - We create a frame with autolayout to them
@@ -92,14 +85,14 @@ handleEvent('addTopRow', async () => {
     row.layoutMode = "VERTICAL"
     row.counterAxisSizingMode = "AUTO"
 
-    const rowNode = figma.getNodeById(row.id)
+    let rowNode = figma.getNodeById(row.id)
     console.log(rowNode);
-    
-    // const selection = figma.currentPage.selection.slice();
-    // selection.splice(rowNode) //Removes current selection
-    // selection.push(rowNode) //Adds node to the selection
-    // figma.currentPage.selection = selection
-    // figma.viewport.scrollAndZoomIntoView([rowNode]);
+        
+    const selection = figma.currentPage.selection.slice();
+    selection.splice(rowNode) //Removes current selection
+    selection.push(rowNode) //Adds node to the selection
+    figma.currentPage.selection = selection
+    figma.viewport.scrollAndZoomIntoView([rowNode]);
 
   }
   
@@ -111,17 +104,6 @@ handleEvent('addTopRow', async () => {
     insertToSelectedNode(instance);
  
 })
-
-
-
-
-
-
-
-
-
-
-
 
 handleEvent('addInstance', async () => {
 
