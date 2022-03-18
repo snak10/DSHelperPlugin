@@ -701,6 +701,7 @@ declare global {
       ChildrenMixin,
       ExportMixin,
       RelaunchableMixin {
+    concat(node: SceneNode): readonly SceneNode[];
     readonly type: 'PAGE';
     clone(): PageNode;
 
@@ -719,6 +720,14 @@ declare global {
   }
 
   interface FrameNode extends DefaultFrameMixin {
+    layoutGrow: number;
+    paddingTop: number;
+    paddingBottom: number;
+    primaryAxisSizingMode: string;
+    paddingLeft: number;
+    paddingRight: number;
+    primaryAxisAlignItems: string;
+    counterAxisAlignItems: string;
     readonly type: 'FRAME';
     clone(): FrameNode;
   }
@@ -795,6 +804,8 @@ declare global {
   }
 
   interface TextNode extends DefaultShapeMixin, ConstraintMixin {
+    hyperlink: any;
+    listSpacing: number;
     readonly type: 'TEXT';
     clone(): TextNode;
     readonly hasMissingFont: boolean;
@@ -865,6 +876,11 @@ declare global {
   }
 
   interface ComponentNode extends DefaultFrameMixin {
+    paddingTop: number;
+    primaryAxisAlignItems: string;
+    counterAxisAlignItems: string;
+    primaryAxisSizingMode: string;
+    documentationLinks: any[];
     readonly type: 'COMPONENT';
     clone(): ComponentNode;
 
@@ -875,6 +891,8 @@ declare global {
   }
 
   interface InstanceNode extends DefaultFrameMixin {
+    swapComponent(component: ComponentNode);
+    primaryAxisSizingMode: string;
     readonly type: 'INSTANCE';
     clone(): InstanceNode;
     masterComponent: ComponentNode;

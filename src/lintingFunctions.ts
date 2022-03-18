@@ -475,3 +475,9 @@ function RGBToHex(r, g, b) {
 
   return '#' + r + g + b;
 }
+
+export function insertToSelectedNode(node) {
+  const selection = figma.currentPage.selection
+  const selectionId = selection[0].id
+  figma.getNodeById(selectionId).appendChild(node)
+}
